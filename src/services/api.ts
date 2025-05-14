@@ -1,5 +1,6 @@
 
 import axios from 'axios';
+import { toast } from "@/hooks/use-toast";
 
 const API_URL = 'http://localhost:8080';
 
@@ -50,6 +51,13 @@ api.interceptors.response.use(
         sessionStorage.removeItem('tennis_auth_token');
         sessionStorage.removeItem('tennis_user_data');
         sessionStorage.removeItem('tennis_refresh_token');
+        
+        // Show toast notification
+        toast({
+          variant: "destructive",
+          title: "Session expired",
+          description: "Please login again to continue",
+        });
         
         // Redirect to login page
         window.location.href = '/login';

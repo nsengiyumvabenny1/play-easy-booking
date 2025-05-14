@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import MainLayout from "./components/layout/MainLayout";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -70,8 +70,6 @@ const App = () => (
               }
             />
 
-            {/* TODO: Add routes for all other protected pages */}
-            
             {/* Admin routes */}
             <Route
               path="/admin/users"
@@ -79,6 +77,50 @@ const App = () => (
                 <ProtectedRoute requiredRole="ADMIN">
                   <MainLayout>
                     <div>Admin User Management</div>
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            
+            <Route
+              path="/admin/coaches"
+              element={
+                <ProtectedRoute requiredRole="ADMIN">
+                  <MainLayout>
+                    <div>Coach Management</div>
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/admin/courts"
+              element={
+                <ProtectedRoute requiredRole="ADMIN">
+                  <MainLayout>
+                    <div>Court Management</div>
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/admin/bookings"
+              element={
+                <ProtectedRoute requiredRole="ADMIN">
+                  <MainLayout>
+                    <div>Booking Management</div>
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/admin/tournaments"
+              element={
+                <ProtectedRoute requiredRole="ADMIN">
+                  <MainLayout>
+                    <div>Tournament Management</div>
                   </MainLayout>
                 </ProtectedRoute>
               }
