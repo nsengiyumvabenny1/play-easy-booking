@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useForm } from "react-hook-form";
@@ -54,9 +53,17 @@ const RegisterForm = () => {
 
   const onSubmit = async (values: RegisterFormValues) => {
     try {
-      // Remove confirmPassword before sending to API
+      // Remove confirmPassword before sending to API and ensure all required fields are present
       const { confirmPassword, ...registrationData } = values;
-      await register(registrationData);
+      
+      // Now we're explicitly passing all required fields with their correct types
+      await register({
+        firstName: registrationData.firstName,
+        lastName: registrationData.lastName,
+        email: registrationData.email,
+        password: registrationData.password,
+        phone: registrationData.phone
+      });
     } catch (error) {
       console.error("Registration error:", error);
       // Error is handled in the auth context
