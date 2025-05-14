@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useForm } from "react-hook-form";
@@ -35,7 +36,7 @@ const formSchema = z.object({
 type RegisterFormValues = z.infer<typeof formSchema>;
 
 const RegisterForm = () => {
-  const { register, isLoading } = useAuth();
+  const { registerPlayer, isLoading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -53,11 +54,11 @@ const RegisterForm = () => {
 
   const onSubmit = async (values: RegisterFormValues) => {
     try {
-      // Remove confirmPassword before sending to API and ensure all required fields are present
+      // Remove confirmPassword before sending to API
       const { confirmPassword, ...registrationData } = values;
       
-      // Now we're explicitly passing all required fields with their correct types
-      await register({
+      // Use the registerPlayer method which calls the correct endpoint
+      await registerPlayer({
         firstName: registrationData.firstName,
         lastName: registrationData.lastName,
         email: registrationData.email,

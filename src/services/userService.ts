@@ -31,6 +31,14 @@ export interface PasswordChangeRequest {
   newPassword: string;
 }
 
+export interface PlayerRegistrationRequest {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
+  password: string;
+}
+
 const userService = {
   // Get current user profile
   getCurrentUser: async () => {
@@ -53,6 +61,12 @@ const userService = {
     if (!userId) throw new Error('User not authenticated');
     
     const response = await api.patch(`/users/${userId}/password`, passwordData);
+    return response.data;
+  },
+  
+  // Register new player (public endpoint)
+  registerPlayer: async (playerData: PlayerRegistrationRequest) => {
+    const response = await api.post('/api/auth/register/player', playerData);
     return response.data;
   },
   

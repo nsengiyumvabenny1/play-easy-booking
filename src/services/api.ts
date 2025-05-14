@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/api';
+const API_URL = 'http://localhost:8080';
 
 // Create axios instance with base URL
 const api = axios.create({
@@ -32,7 +32,7 @@ api.interceptors.response.use(
         const refreshToken = sessionStorage.getItem('tennis_refresh_token');
         
         if (refreshToken) {
-          const response = await axios.post(`${API_URL}/auth/refresh-token`, { refreshToken });
+          const response = await axios.post(`${API_URL}/api/auth/refresh-token`, { refreshToken });
           const newToken = response.data.accessToken;
           
           // Update stored token and header
