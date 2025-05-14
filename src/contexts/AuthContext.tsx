@@ -1,8 +1,8 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/components/ui/use-toast';
 import axios from 'axios';
+import userService, { PlayerRegistrationRequest } from '@/services/userService';
 
 // Define types
 type User = {
@@ -14,6 +14,14 @@ type User = {
   profileImageUrl?: string;
 };
 
+type RegisterData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  phone?: string;
+};
+
 type AuthContextType = {
   user: User | null;
   token: string | null;
@@ -22,14 +30,7 @@ type AuthContextType = {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   register: (userData: RegisterData) => Promise<void>;
-};
-
-type RegisterData = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  phone?: string;
+  registerPlayer: (playerData: PlayerRegistrationRequest) => Promise<void>;
 };
 
 // API config
@@ -177,6 +178,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  // Register player function (using userService)
+  const registerPlayer = async (playerData: PlayerRegistrationRequest) => {
+    try {
+      setIsLoading(true);
+      const response = await userService.registerPlayer(playerData);
+      console.log('Player registration response:', response);
+      
+      toast({
+        title: "Registration successful",
+        description: "Your account has been created. Please check your email for verification.",
+      });
+      
+      navigate('/login');
+    } catch (error: any) {
+      console.error('Player registration error:', error);
+      let errorMessage = 'Registration failed. Please try again.';
+      
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+      
+      toast({
+        variant: "destructive",
+        title: "Registration failed",
+        description: errorMessage,
+      });
+      
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Context value
   const value = {
     user,
@@ -186,6 +220,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     login,
     logout,
     register,
+    registerPlayer,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
